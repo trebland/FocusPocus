@@ -1,0 +1,4 @@
+{
+  "remote": "mongodb+srv://phillip:connect100@pooslargeproject-pidtx.mongodb.net/test?retryWrites=true&w=majority",
+  "local": "mongodb://localhost:27017/test"
+}
