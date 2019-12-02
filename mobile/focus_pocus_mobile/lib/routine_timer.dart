@@ -2,10 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-const timeLimit = const Duration(minutes: 25);
-const timeout = const Duration(seconds: 3);
-const ms = const Duration(milliseconds: 1);
-
 void handleTimerEnd ()
 {
 
@@ -32,6 +28,7 @@ class MyRoutineTimerPage extends StatefulWidget {
 class _MyRoutineTimerState extends State<MyRoutineTimerPage>
 {
   Duration timeStandard = new Duration(minutes: 25);
+  Duration timeRemaining;
 
   String timerStartPauseText = "";
   String startTimer = "Start";
@@ -46,6 +43,7 @@ class _MyRoutineTimerState extends State<MyRoutineTimerPage>
     super.initState();
     timerStartPauseText = startTimer;
     timeLeft = timeStandard.inMinutes.toString() + ":" + (timeStandard.inSeconds % 60).toString().padLeft(2,'0');
+    timeRemaining = null;
   }
 
   Future<void> executeTimer() async {
@@ -53,12 +51,10 @@ class _MyRoutineTimerState extends State<MyRoutineTimerPage>
       setState(() {
         if (DateTime.now().isAfter(targetTime))
         {
-          timerStartPauseText = startTimer;
           timeLeft = "Timer Over";
           isRunning = false;
         }
         else{
-          timerStartPauseText = pauseTimer;
           Duration timeRemaining = targetTime.difference(DateTime.now());
           timeLeft = timeRemaining.inMinutes.toString() + ":" + (timeRemaining.inSeconds % 60).toString().padLeft(2,'0');
         }
@@ -110,10 +106,18 @@ class _MyRoutineTimerState extends State<MyRoutineTimerPage>
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: <Widget>[
                     Center(
-                      child: Text(
-                        "$timeLeft",
-                        style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-                      ),
+                      child: Column(
+                        children: <Widget>[
+                          Text(
+                            "Time Remaining",
+                            style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            "$timeLeft",
+                            style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      )
                     ),
                   ],
                 ),
@@ -127,11 +131,25 @@ class _MyRoutineTimerState extends State<MyRoutineTimerPage>
                     child: RaisedButton(
                       child: Text(timerStartPauseText),
                       onPressed: () {
-                        if (targetTime == null || DateTime.now().isAfter(targetTime)) {
-                          targetTime = DateTime.now().add(timeStandard);
+                        if (!isRunning)
+                        {
+                          if (targetTime == null || DateTime.now().isAfter(targetTime)) {
+                            if (timeRemaining != null)
+                              targetTime = DateTime.now().add(timeRemaining);
+                            else
+                              targetTime = DateTime.now().add(timeStandard);
+                          }
+
+                          isRunning = true;
+                          timerStartPauseText = pauseTimer;
+                          executeTimer();
                         }
-                        isRunning = true;
-                        executeTimer();
+                        else
+                        {
+                          isRunning = false;
+                          timerStartPauseText = startTimer;
+                          timeRemaining = targetTime.difference(DateTime.now());
+                        }
                       },
                       shape: RoundedRectangleBorder(
                         borderRadius: new BorderRadius.circular(18.0),
@@ -143,6 +161,9 @@ class _MyRoutineTimerState extends State<MyRoutineTimerPage>
                     child: RaisedButton(
                       child: Text('Reset Timer'),
                       onPressed: () {
+                        timerStartPauseText = startTimer;
+                        timeLeft = timeStandard.inMinutes.toString() + ":" + (timeStandard.inSeconds % 60).toString().padLeft(2,'0');
+                        timeRemaining = null;
                       },
                       shape: RoundedRectangleBorder(
                         borderRadius: new BorderRadius.circular(18.0),
