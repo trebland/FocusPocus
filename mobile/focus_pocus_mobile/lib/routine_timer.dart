@@ -63,6 +63,16 @@ class _MyRoutineTimerState extends State<MyRoutineTimerPage>
     }
   }
 
+  Future<void> mStartTimer() async
+  {
+
+  }
+
+  Future<void> mStopTimer() async
+  {
+
+  }
+
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -108,13 +118,95 @@ class _MyRoutineTimerState extends State<MyRoutineTimerPage>
                     Center(
                       child: Column(
                         children: <Widget>[
-                          Text(
-                            "Time Remaining",
-                            style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                          Container(
+                            child: IntrinsicHeight(
+                              child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  children: <Widget>
+                                  [
+                                    Container(
+                                      child: Icon(
+                                        Icons.access_alarm,
+                                        size: 40,
+                                      ),
+                                      decoration: new BoxDecoration(
+                                        color: Colors.blue,
+                                        borderRadius: new BorderRadius.only(
+                                          topLeft: Radius.circular(20),
+                                          bottomLeft: Radius.circular(20),
+                                        ),
+                                      ),
+                                      padding: EdgeInsets.only(left: 5),
+                                    ),
+                                    Flexible(
+                                      child: TextField(
+                                        textAlign: TextAlign.left,
+                                        decoration: new InputDecoration(
+                                          hintText: 'Set Focus Timer',
+                                          border: new OutlineInputBorder(
+                                            borderRadius: BorderRadius.only(
+                                              topRight: Radius.circular(20),
+                                              bottomRight: Radius.circular(20),
+                                            ),
+                                            borderSide: new BorderSide(
+                                              color: Colors.black,
+                                              width: 0.5,
+                                            ),
+                                          ),
+                                        ),
+                                        style: TextStyle(fontSize: 16, color: Colors.white),
+                                      ),
+                                    ),
+                                  ]
+                              ),
+                            ),
+                            margin: EdgeInsets.only(left: 25, right: 25, bottom: 25),
                           ),
-                          Text(
-                            "$timeLeft",
-                            style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                          Container(
+                            child: IntrinsicHeight(
+                              child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  children: <Widget>
+                                  [
+                                    Container(
+                                      child: Icon(
+                                        Icons.alarm_off,
+                                        size: 40,
+                                      ),
+                                      decoration: new BoxDecoration(
+                                        color: Colors.blue,
+                                        borderRadius: new BorderRadius.only(
+                                          topLeft: Radius.circular(20),
+                                          bottomLeft: Radius.circular(20),
+                                        ),
+                                      ),
+                                      padding: EdgeInsets.only(left: 5),
+                                    ),
+                                    Flexible(
+                                      child: TextField(
+                                        textAlign: TextAlign.left,
+                                        decoration: new InputDecoration(
+                                          hintText: 'Set Break Timer',
+                                          border: new OutlineInputBorder(
+                                            borderRadius: BorderRadius.only(
+                                              topRight: Radius.circular(20),
+                                              bottomRight: Radius.circular(20),
+                                            ),
+                                            borderSide: new BorderSide(
+                                              color: Colors.black,
+                                              width: 0.5,
+                                            ),
+                                          ),
+                                        ),
+                                        style: TextStyle(fontSize: 16, color: Colors.white),
+                                      ),
+                                    ),
+                                  ]
+                              ),
+                            ),
+                            margin: EdgeInsets.only(left: 25, right: 25, bottom: 25),
                           ),
                         ],
                       )
@@ -129,7 +221,7 @@ class _MyRoutineTimerState extends State<MyRoutineTimerPage>
                 children: <Widget>[
                   Container(
                     child: RaisedButton(
-                      child: Text(timerStartPauseText),
+                      child: Text('$timerStartPauseText'),
                       onPressed: () {
                         if (!isRunning)
                         {

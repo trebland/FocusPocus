@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:focus_pocus_mobile/forgot_password.dart';
+import 'package:focus_pocus_mobile/register_account.dart';
 
 import 'dashboard.dart';
 import 'package:http/http.dart' as http;
@@ -126,7 +128,44 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                     ),
                     padding: EdgeInsets.only(left: 5),
                     margin: EdgeInsets.only(bottom: 20, left: 20, right: 20),
-                  )
+                  ),
+                  Container(
+                    child: Column(
+                      children: <Widget>[
+                        Builder(
+                            builder: (context) => Center(
+                                child: FlatButton(
+                                  child: const Text('Forgot Password?'),
+                                  onPressed: ()
+                                  {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => MyForgotPasswordPage(title: "Reset Password",)),
+                                    );
+                                  },
+                                )
+                            )
+                        ),
+                        Text(
+                            "OR"
+                        ),
+                        Builder(
+                            builder: (context) => Center(
+                                child: FlatButton(
+                                  child: const Text('Register Account'),
+                                  onPressed: ()
+                                  {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => MyRegisterAccountPage(title: "Register Account",)),
+                                    );
+                                  },
+                                )
+                            )
+                        )
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -135,7 +174,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
             child: ButtonBar(
               children: <Widget>[
                 FlatButton(
-                  child: Text('CANCEL'),
+                  child: Text('CLEAR'),
                   onPressed: () {
                     _usernameController.clear();
                     _passwordController.clear();
