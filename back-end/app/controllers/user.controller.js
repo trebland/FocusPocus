@@ -121,7 +121,7 @@ exports.login = (req, res) => {
 
 // Edit user
 // JSON inputs required: token
-// outputs JSON: token, username, email, fuullName, and message
+// outputs JSON: token, username, email, fullName, and message
 exports.edit = (req, res) => {
   // Check required fields
   if (!req.body.token) {
@@ -137,7 +137,9 @@ exports.edit = (req, res) => {
     userId = crypto.decrypt(token.payload.userId);
     // for some reason, decrypt has double quotes which need
     // to be removed from both front and back of the string
-    userId = userId.substr(1, userId.length - 2);
+    if (userId.length == 26) {
+      userId = userId.substr(1, userId.length - 2);
+    }
   }
   else {
     return res.status(401).json({
@@ -250,7 +252,9 @@ exports.delete = (req, res) => {
     // decode jwt, then decrypt user ID
     token = jwt.decode(req.body.token);
     userId = crypto.decrypt(token.payload.userId);
-    userId = userId.substr(1, userId.length - 2);
+    if (userId.length == 26) {
+      userId = userId.substr(1, userId.length - 2);
+    }
   }
   else {
     return res.status(401).json({
@@ -331,7 +335,9 @@ exports.getAll = (req, res) => {
     userId = crypto.decrypt(token.payload.userId);
     // for some reason, decrypt has double quotes which need
     // to be removed from both front and back of the string
-    userId = userId.substr(1, userId.length - 2);
+    if (userId.length == 26) {
+      userId = userId.substr(1, userId.length - 2);
+    }
   }
   else {
     return res.status(401).json({

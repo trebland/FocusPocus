@@ -1,72 +1,42 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 import 'dashboard.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
-
-Future<Post> fetchPost(String username, String email, String password) async {
-  var mUrl = "http://54.221.121.199/registerUser";
-  // {'username': '$username', 'email': '$email', 'password': '$password'}
-  var body = json.encode({
-    "username": '$username',
-    "email": '$email',
-    "password": '$password'
-  });
-
-  var response = await http.post(mUrl,
-      body: body,
-      headers: {'Content-type': 'application/json'});
+/*
+Future<Post> fetchPost() async {
+  var response = await http.post(url, body: {'name': 'doodle', 'color': 'blue'});
 
   if (response.statusCode == 200) {
     // If the call to the server was successful, parse the JSON.
-    Post mPost = Post.fromJson(json.decode(response.body));
-
-    Fluttertoast.showToast(
-        msg: mPost.username,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIos: 1,
-        backgroundColor: Colors.green,
-        textColor: Colors.white,
-        fontSize: 16.0
-    );
-
-    return mPost;
+    return Post.fromJson(json.decode(response.body));
   } else {
     // If that call was not successful, throw an error.
-    Post mPost = Post.fromJson(json.decode(response.body));
-
-    Fluttertoast.showToast(
-        msg: mPost.message,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIos: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 16.0
-    );
-
     throw Exception('Failed to load post');
   }
 }
 
 class Post {
-  final String username;
-  final String message;
+  final String email;
+  final String firstName;
+  final String lastName;
+  final List<String> roles;
 
-  Post({this.username, this.message});
+  Post({this.email, this.firstName, this.lastName, this.roles});
 
   factory Post.fromJson(Map<String, dynamic> json) {
     return Post(
-      username: json['username'],
-      message: json['message'],
+      email: json['email'],
+      firstName: json['firstName'],
+      lastName: json['lastName'],
+      roles: json['roles'].cast<String>(),
     );
   }
 }
-
-class MyRegisterAccountPage extends StatefulWidget {
-  MyRegisterAccountPage({Key key, this.title}) : super(key: key);
+*/
+class MyAddRoutinePage extends StatefulWidget {
+  MyAddRoutinePage({Key key, this.title}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -80,10 +50,10 @@ class MyRegisterAccountPage extends StatefulWidget {
   final String title;
 
   @override
-  _MyRegisterAccountState createState() => _MyRegisterAccountState();
+  _MyAddRoutineState createState() => _MyAddRoutineState();
 }
 
-class _MyRegisterAccountState extends State<MyRegisterAccountPage> with SingleTickerProviderStateMixin {
+class _MyAddRoutineState extends State<MyAddRoutinePage> with SingleTickerProviderStateMixin {
 
   @override
   void initState() {
@@ -116,7 +86,7 @@ class _MyRegisterAccountState extends State<MyRegisterAccountPage> with SingleTi
                         controller: _emailController,
                         decoration: InputDecoration(
                           filled: true,
-                          labelText: 'Email',
+                          labelText: 'Routine Name',
                         ),
                       ),
                       padding: EdgeInsets.only(left: 5),
@@ -124,10 +94,21 @@ class _MyRegisterAccountState extends State<MyRegisterAccountPage> with SingleTi
                     ),
                     Container(
                       child: TextField(
+                        controller: _emailController,
+                        decoration: InputDecoration(
+                          filled: true,
+                          labelText: 'Focus Timer Duration',
+                        ),
+                      ),
+                      padding: EdgeInsets.only(left: 5),
+                      margin: EdgeInsets.only(bottom: 20, left: 20, right: 20),
+                    ),
+                    Container(
+                      child: TextField(
                         controller: _usernameController,
                         decoration: InputDecoration(
                           filled: true,
-                          labelText: 'Username',
+                          labelText: 'Short Break Timer Duration',
                         ),
                       ),
                       padding: EdgeInsets.only(left: 5),
@@ -138,7 +119,7 @@ class _MyRegisterAccountState extends State<MyRegisterAccountPage> with SingleTi
                         controller: _passwordController,
                         decoration: InputDecoration(
                           filled: true,
-                          labelText: 'Password',
+                          labelText: 'Long Break Timer Duration',
                         ),
                         obscureText: true,
                       ),
@@ -150,7 +131,7 @@ class _MyRegisterAccountState extends State<MyRegisterAccountPage> with SingleTi
                         controller: _confirmPasswordController,
                         decoration: InputDecoration(
                           filled: true,
-                          labelText: 'Confirm Password',
+                          labelText: 'Number of Cycles per Session',
                         ),
                         obscureText: true,
                       ),
@@ -174,10 +155,9 @@ class _MyRegisterAccountState extends State<MyRegisterAccountPage> with SingleTi
                     },
                   ),
                   RaisedButton(
-                    child: Text('REGISTER'),
+                    child: Text('ADD ROUTINE'),
                     onPressed: () {
-                      fetchPost(_usernameController.text, _emailController.text, _passwordController.text);
-                      //Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyDashboardPage(title: 'Dashboard')));
+                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyDashboardPage(title: 'Dashboard')));
                     },
                   ),
                 ],

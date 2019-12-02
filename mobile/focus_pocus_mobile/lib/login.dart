@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:focus_pocus_mobile/forgot_password.dart';
 import 'package:focus_pocus_mobile/register_account.dart';
 
@@ -31,37 +32,66 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-/*
-Future<Post> fetchPost() async {
-  var response = await http.post(url, body: {'name': 'doodle', 'color': 'blue'});
+
+Future<Post> fetchPost(String username, String password) async {
+  var mUrl = "http://54.221.121.199/loginUser";
+
+  var body = json.encode({
+    "username": '$username',
+    "password": '$password'
+  });
+
+  var response = await http.post(mUrl,
+      body: body,
+      headers: {'Content-type': 'application/json'});
 
   if (response.statusCode == 200) {
     // If the call to the server was successful, parse the JSON.
-    return Post.fromJson(json.decode(response.body));
+    Post mPost = Post.fromJson(json.decode(response.body));
+
+    Fluttertoast.showToast(
+        msg: mPost.message,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIos: 1,
+        backgroundColor: Colors.green,
+        textColor: Colors.white,
+        fontSize: 16.0
+    );
+
+    return mPost;
   } else {
     // If that call was not successful, throw an error.
+    Post mPost = Post.fromJson(json.decode(response.body));
+
+    Fluttertoast.showToast(
+        msg: mPost.message,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIos: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0
+    );
+
     throw Exception('Failed to load post');
   }
 }
 
 class Post {
-  final String email;
-  final String firstName;
-  final String lastName;
-  final List<String> roles;
+  final String username;
+  final String message;
 
-  Post({this.email, this.firstName, this.lastName, this.roles});
+  Post({this.username, this.message});
 
   factory Post.fromJson(Map<String, dynamic> json) {
     return Post(
-      email: json['email'],
-      firstName: json['firstName'],
-      lastName: json['lastName'],
-      roles: json['roles'].cast<String>(),
+      username: json['username'],
+      message: json['message'],
     );
   }
 }
-*/
+
 class LoginPage extends StatefulWidget {
   LoginPage({Key key, this.title}) : super(key: key);
 
@@ -183,6 +213,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                 RaisedButton(
                   child: Text('LOGIN'),
                   onPressed: () {
+                    fetchPost(_usernameController.text, _passwordController.text);
                     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyDashboardPage(title: 'Dashboard')));
                   },
                 ),

@@ -40,7 +40,9 @@ exports.create = (req, res) => {
     // decode jwt, then decrypt user ID
     token = jwt.decode(req.body.token);
     userId = crypto.decrypt(token.payload.userId);
-    userId = userId.substr(1, userId.length - 2);
+    if (userId.length == 26) {
+      userId = userId.substr(1, userId.length - 2);
+    }
   }
   else {
     return res.status(401).json({
@@ -67,7 +69,7 @@ exports.create = (req, res) => {
     .then(routine => {
 
       // encrypt user ID before putting into payload
-      let cipher = crypto.encrypt(userId);
+      let cipher = crypto.encrypt(routine.userId);
       let payload = {
         userId: cipher,
       };
@@ -107,7 +109,9 @@ exports.userRoutines = (req, res) => {
     // decode jwt, then decrypt user ID
     token = jwt.decode(req.body.token);
     userId = crypto.decrypt(token.payload.userId);
-    userId = userId.substr(1, userId.length - 2);
+    if (userId.length == 26) {
+      userId = userId.substr(1, userId.length - 2);
+    }
   }
   else {
     return res.status(401).json({
@@ -171,7 +175,9 @@ exports.edit = (req, res) => {
     // decode jwt, then decrypt user ID
     token = jwt.decode(req.body.token);
     userId = crypto.decrypt(token.payload.userId);
-    userId = userId.substr(1, userId.length - 2);
+    if (userId.length == 26) {
+      userId = userId.substr(1, userId.length - 2);
+    }
   }
   else {
     return res.status(401).json({
@@ -289,7 +295,9 @@ exports.delete = (req, res) => {
     // decode jwt, then decrypt user ID
     token = jwt.decode(req.body.token);
     userId = crypto.decrypt(token.payload.userId);
-    userId = userId.substr(1, userId.length - 2);
+    if (userId.length == 26) {
+      userId = userId.substr(1, userId.length - 2);
+    }
   }
   else {
     return res.status(401).json({
@@ -346,7 +354,9 @@ exports.deleteAll = (req, res) => {
     // decode jwt, then decrypt user ID
     token = jwt.decode(req.body.token);
     userId = crypto.decrypt(token.payload.userId);
-    userId = userId.substr(1, userId.length - 2);
+    if (userId.length == 26) {
+      userId = userId.substr(1, userId.length - 2);
+    }
   }
   else {
     return res.status(401).json({
@@ -395,9 +405,9 @@ exports.getAll = (req, res) => {
     // decode jwt, then decrypt user ID
     token = jwt.decode(req.body.token);
     userId = crypto.decrypt(token.payload.userId);
-    // for some reason, decrypt has double quotes which need
-    // to be removed from both front and back of the string
-    userId = userId.substr(1, userId.length - 2);
+    if (userId.length == 26) {
+      userId = userId.substr(1, userId.length - 2);
+    }
   }
   else {
     return res.status(401).json({

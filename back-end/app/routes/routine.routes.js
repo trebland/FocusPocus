@@ -9,7 +9,7 @@ module.exports = app => {
   app.post("/createRoutine", routines.create);
 
   // Get all the user's routines
-  app.post("/getUserRoutines", routines.userRoutines);
+  app.post("/userRoutines", routines.userRoutines);
 
   // Edit a routine
   app.put("/editRoutine", routines.edit);

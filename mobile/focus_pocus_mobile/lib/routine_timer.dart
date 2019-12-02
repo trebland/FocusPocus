@@ -142,8 +142,9 @@ class _MyRoutineTimerState extends State<MyRoutineTimerPage>
                                     Flexible(
                                       child: TextField(
                                         textAlign: TextAlign.left,
+                                        enabled: false,
                                         decoration: new InputDecoration(
-                                          hintText: 'Set Focus Timer',
+                                          hintText: '[FOCUS DURATION]',
                                           border: new OutlineInputBorder(
                                             borderRadius: BorderRadius.only(
                                               topRight: Radius.circular(20),
@@ -187,8 +188,101 @@ class _MyRoutineTimerState extends State<MyRoutineTimerPage>
                                     Flexible(
                                       child: TextField(
                                         textAlign: TextAlign.left,
+                                        enabled: false,
                                         decoration: new InputDecoration(
-                                          hintText: 'Set Break Timer',
+                                          hintText: '[SMALL BREAK DURATION]',
+                                          border: new OutlineInputBorder(
+                                            borderRadius: BorderRadius.only(
+                                              topRight: Radius.circular(20),
+                                              bottomRight: Radius.circular(20),
+                                            ),
+                                            borderSide: new BorderSide(
+                                              color: Colors.black,
+                                              width: 0.5,
+                                            ),
+                                          ),
+                                        ),
+                                        style: TextStyle(fontSize: 16, color: Colors.white),
+                                      ),
+                                    ),
+                                  ]
+                              ),
+                            ),
+                            margin: EdgeInsets.only(left: 25, right: 25, bottom: 25),
+                          ),
+                          Container(
+                            child: IntrinsicHeight(
+                              child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  children: <Widget>
+                                  [
+                                    Container(
+                                      child: Icon(
+                                        Icons.alarm_off,
+                                        size: 40,
+                                      ),
+                                      decoration: new BoxDecoration(
+                                        color: Colors.blue,
+                                        borderRadius: new BorderRadius.only(
+                                          topLeft: Radius.circular(20),
+                                          bottomLeft: Radius.circular(20),
+                                        ),
+                                      ),
+                                      padding: EdgeInsets.only(left: 5),
+                                    ),
+                                    Flexible(
+                                      child: TextField(
+                                        textAlign: TextAlign.left,
+                                        enabled: false,
+                                        decoration: new InputDecoration(
+                                          hintText: '[LARGE BREAK DURATION]',
+                                          border: new OutlineInputBorder(
+                                            borderRadius: BorderRadius.only(
+                                              topRight: Radius.circular(20),
+                                              bottomRight: Radius.circular(20),
+                                            ),
+                                            borderSide: new BorderSide(
+                                              color: Colors.black,
+                                              width: 0.5,
+                                            ),
+                                          ),
+                                        ),
+                                        style: TextStyle(fontSize: 16, color: Colors.white),
+                                      ),
+                                    ),
+                                  ]
+                              ),
+                            ),
+                            margin: EdgeInsets.only(left: 25, right: 25, bottom: 25),
+                          ),
+                          Container(
+                            child: IntrinsicHeight(
+                              child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  children: <Widget>
+                                  [
+                                    Container(
+                                      child: Icon(
+                                        Icons.alarm_off,
+                                        size: 40,
+                                      ),
+                                      decoration: new BoxDecoration(
+                                        color: Colors.blue,
+                                        borderRadius: new BorderRadius.only(
+                                          topLeft: Radius.circular(20),
+                                          bottomLeft: Radius.circular(20),
+                                        ),
+                                      ),
+                                      padding: EdgeInsets.only(left: 5),
+                                    ),
+                                    Flexible(
+                                      child: TextField(
+                                        textAlign: TextAlign.left,
+                                        enabled: false,
+                                        decoration: new InputDecoration(
+                                          hintText: '[NUMBER OF CYCLES]',
                                           border: new OutlineInputBorder(
                                             borderRadius: BorderRadius.only(
                                               topRight: Radius.circular(20),

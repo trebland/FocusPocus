@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:focus_pocus_mobile/add_routine.dart';
 import 'package:focus_pocus_mobile/routine_timer.dart';
 
 class MyDashboardPage extends StatefulWidget {
@@ -54,6 +55,11 @@ class _MyDashboardState extends State<MyDashboardPage> with SingleTickerProvider
     super.dispose();
   }
 
+  void mAddRoutine()
+  {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => MyAddRoutinePage(title: 'Add Routine')));
+  }
+
   final List<String> routines = <String>['Study Calculus', 'Exercise', 'Play Games', 'Talk to Family', 'Check Emails', 'Remember the 80\'s'];
   final List<int> colorCodes = <int>[600, 500];
 
@@ -69,7 +75,7 @@ class _MyDashboardState extends State<MyDashboardPage> with SingleTickerProvider
               color: Colors.white,
             ),
             onPressed: () {
-
+              mAddRoutine();
             },
           )
         ],
