@@ -1,3 +1,0 @@
-username: Admin
-email: admin@email.com
-password: 3p4SS100
