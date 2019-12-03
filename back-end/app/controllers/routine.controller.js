@@ -426,7 +426,7 @@ exports.getAll = (req, res) => {
       Routine.find()
         .then(routines => {
           if (!routines[0]) {
-            return res.json({
+            return res.status(404).json({
               message: "No routines exist in the database."
             });
           }

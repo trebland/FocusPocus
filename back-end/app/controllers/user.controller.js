@@ -356,7 +356,7 @@ exports.getAll = (req, res) => {
       User.find()
         .then(users => {
           if (!users[0]) {
-            return res.json({
+            return res.status(404).json({
               message: "No users exist in the database."
             });
           }
