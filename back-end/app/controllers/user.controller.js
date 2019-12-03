@@ -85,7 +85,7 @@ exports.login = (req, res) => {
 
       // check that the passwords match
       if ( !bcrypt.compareSync(req.body.password, user.password) ) {
-        return res.json({
+        return res.status(401).json({
           message: "Incorect password."
         });
       }
@@ -273,7 +273,7 @@ exports.delete = (req, res) => {
 
     // check that the passwords match
     if ( !bcrypt.compareSync(req.body.password, user.password) ) {
-      return res.json({
+      return res.status(401).json({
         message: "Incorect password."
       });
     }
@@ -348,7 +348,7 @@ exports.getAll = (req, res) => {
   User.findOne({ _id: userId, admin: true })
     .then(user => {
       if (!user) {
-        return res.json({
+        return res.status(403).json({
           message: "This user does not exist or does not have admin access."
         });
       }
@@ -356,7 +356,7 @@ exports.getAll = (req, res) => {
       User.find()
         .then(users => {
           if (!users[0]) {
-            return res.json({
+            return res.status(404).json({
               message: "No users exist in the database."
             });
           }

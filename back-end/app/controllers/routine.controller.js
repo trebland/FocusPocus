@@ -123,7 +123,7 @@ exports.userRoutines = (req, res) => {
   Routine.find({ userId: userId })
     .then(routines => {
       if (!routines[0]) {
-        return res.json({
+        return res.status(404).json({
           message: "No routines for this user exist in the database."
         });
       }
@@ -418,7 +418,7 @@ exports.getAll = (req, res) => {
   User.findOne({ _id: userId, admin: true })
     .then(user => {
       if (!user) {
-        return res.json({
+        return res.status(404).json({
           message: "User does not exist or does not have admin access."
         });
       }
@@ -426,7 +426,7 @@ exports.getAll = (req, res) => {
       Routine.find()
         .then(routines => {
           if (!routines[0]) {
-            return res.json({
+            return res.status(404).json({
               message: "No routines exist in the database."
             });
           }
