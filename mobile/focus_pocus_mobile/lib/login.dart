@@ -35,13 +35,15 @@ class MyApp extends StatelessWidget {
 
 class Post {
   final String username;
+  final String token;
   final String message;
 
-  Post({this.username, this.message});
+  Post({this.username, this.token, this.message});
 
   factory Post.fromJson(Map<String, dynamic> json) {
     return Post(
       username: json['username'],
+      token: json['token'],
       message: json['message'],
     );
   }
@@ -93,7 +95,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
           fontSize: 16.0
       );
 
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyDashboardPage(title: 'Dashboard')));
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyDashboardPage(title: 'Dashboard', token: mPost.token)));
       return mPost;
     } else {
       // If that call was not successful, throw an error.

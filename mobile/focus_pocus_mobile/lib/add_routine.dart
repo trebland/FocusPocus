@@ -1,42 +1,29 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'dashboard.dart';
-import 'package:http/http.dart' as http;
-/*
-Future<Post> fetchPost() async {
-  var response = await http.post(url, body: {'name': 'doodle', 'color': 'blue'});
 
-  if (response.statusCode == 200) {
-    // If the call to the server was successful, parse the JSON.
-    return Post.fromJson(json.decode(response.body));
-  } else {
-    // If that call was not successful, throw an error.
-    throw Exception('Failed to load post');
-  }
-}
+import 'dart:convert';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:http/http.dart' as http;
+
 
 class Post {
-  final String email;
-  final String firstName;
-  final String lastName;
-  final List<String> roles;
+  final String token;
+  final String message;
 
-  Post({this.email, this.firstName, this.lastName, this.roles});
+  Post({this.token, this.message});
 
   factory Post.fromJson(Map<String, dynamic> json) {
     return Post(
-      email: json['email'],
-      firstName: json['firstName'],
-      lastName: json['lastName'],
-      roles: json['roles'].cast<String>(),
+      token: json['token'],
+      message: json['message'],
     );
   }
 }
-*/
+
 class MyAddRoutinePage extends StatefulWidget {
-  MyAddRoutinePage({Key key, this.title}) : super(key: key);
+  MyAddRoutinePage({Key key, this.title, this.token}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -48,6 +35,7 @@ class MyAddRoutinePage extends StatefulWidget {
   // always marked "final".
 
   final String title;
+  final String token;
 
   @override
   _MyAddRoutineState createState() => _MyAddRoutineState();
@@ -55,15 +43,71 @@ class MyAddRoutinePage extends StatefulWidget {
 
 class _MyAddRoutineState extends State<MyAddRoutinePage> with SingleTickerProviderStateMixin {
 
+  Future<Post> fetchPost(String token, String routineName, bool coffeeNap,
+      int pomTimer, int breakTimer, int pomCount, int breakCount,
+      int largeBreakCount, bool goalHit) async {
+    var mUrl = "http://54.221.121.199/createRoutine";
+    // {'username': '$username', 'email': '$email', 'password': '$password'}
+    var body = json.encode({
+      "token": '$token',
+      "routineName": '$routineName',
+      "coffeeNap": '$coffeeNap',
+      "pomTimer": '$pomTimer',
+      "breakTimer": '$breakTimer',
+      "pomCount": '$pomCount',
+      "breakCount": '$breakCount',
+      "largeBreakCount": '$largeBreakCount',
+      "goalHit": '$goalHit',
+    });
+
+    var response = await http.post(mUrl,
+        body: body,
+        headers: {'Content-type': 'application/json'});
+
+    if (response.statusCode == 200) {
+      // If the call to the server was successful, parse the JSON.
+      Post mPost = Post.fromJson(json.decode(response.body));
+
+      Fluttertoast.showToast(
+          msg: mPost.message,
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIos: 1,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 16.0
+      );
+
+      Navigator.pop(context, MaterialPageRoute(builder: (context) => MyDashboardPage(title: 'Dashboard', token: mPost.token)));
+      return mPost;
+    } else {
+      // If that call was not successful, throw an error.
+      Post mPost = Post.fromJson(json.decode(response.body));
+
+      Fluttertoast.showToast(
+          msg: mPost.message,
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIos: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0
+      );
+
+      throw Exception('Failed to load post');
+    }
+  }
+
   @override
   void initState() {
     super.initState();
   }
 
-  final _emailController = TextEditingController();
-  final _usernameController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _confirmPasswordController = TextEditingController();
+  final _nameController = TextEditingController();
+  final _focusController = TextEditingController();
+  final _shortBreakController = TextEditingController();
+  final _longBreakController = TextEditingController();
+  final _goalController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +127,7 @@ class _MyAddRoutineState extends State<MyAddRoutinePage> with SingleTickerProvid
                     Text('Focus Pocus'),
                     Container(
                       child: TextField(
-                        controller: _emailController,
+                        controller: _nameController,
                         decoration: InputDecoration(
                           filled: true,
                           labelText: 'Routine Name',
@@ -94,7 +138,11 @@ class _MyAddRoutineState extends State<MyAddRoutinePage> with SingleTickerProvid
                     ),
                     Container(
                       child: TextField(
-                        controller: _emailController,
+                        controller: _focusController,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: <TextInputFormatter>[
+                          WhitelistingTextInputFormatter.digitsOnly
+                        ], // Only numbers can be entered
                         decoration: InputDecoration(
                           filled: true,
                           labelText: 'Focus Timer Duration',
@@ -105,7 +153,11 @@ class _MyAddRoutineState extends State<MyAddRoutinePage> with SingleTickerProvid
                     ),
                     Container(
                       child: TextField(
-                        controller: _usernameController,
+                        controller: _shortBreakController,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: <TextInputFormatter>[
+                          WhitelistingTextInputFormatter.digitsOnly
+                        ], // Only numbers can be entered
                         decoration: InputDecoration(
                           filled: true,
                           labelText: 'Short Break Timer Duration',
@@ -116,24 +168,30 @@ class _MyAddRoutineState extends State<MyAddRoutinePage> with SingleTickerProvid
                     ),
                     Container(
                       child: TextField(
-                        controller: _passwordController,
+                        controller: _longBreakController,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: <TextInputFormatter>[
+                          WhitelistingTextInputFormatter.digitsOnly
+                        ], // Only numbers can be entered
                         decoration: InputDecoration(
                           filled: true,
                           labelText: 'Long Break Timer Duration',
                         ),
-                        obscureText: true,
                       ),
                       padding: EdgeInsets.only(left: 5),
                       margin: EdgeInsets.only(bottom: 20, left: 20, right: 20),
                     ),
                     Container(
                       child: TextField(
-                        controller: _confirmPasswordController,
+                        controller: _goalController,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: <TextInputFormatter>[
+                          WhitelistingTextInputFormatter.digitsOnly
+                        ], // Only numbers can be entered
                         decoration: InputDecoration(
                           filled: true,
                           labelText: 'Number of Cycles per Session',
                         ),
-                        obscureText: true,
                       ),
                       padding: EdgeInsets.only(left: 5),
                       margin: EdgeInsets.only(bottom: 20, left: 20, right: 20),
@@ -148,16 +206,21 @@ class _MyAddRoutineState extends State<MyAddRoutinePage> with SingleTickerProvid
                   FlatButton(
                     child: Text('CLEAR'),
                     onPressed: () {
-                      _emailController.clear();
-                      _usernameController.clear();
-                      _passwordController.clear();
-                      _confirmPasswordController.clear();
+                      _nameController.clear();
+                      _focusController.clear();
+                      _shortBreakController.clear();
+                      _longBreakController.clear();
+                      _goalController.clear();
                     },
                   ),
                   RaisedButton(
                     child: Text('ADD ROUTINE'),
                     onPressed: () {
-                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyDashboardPage(title: 'Dashboard')));
+                      //String token, String routineName, bool coffeeNap,
+                      //      int pomTimer, int breakTimer, int pomCount, int breakCount,
+                      //      int largeBreakCount, bool goalHit
+                      fetchPost(widget.token, _nameController.text, false, int.parse(_focusController.text), int.parse(_shortBreakController.text), 0, 0, 0, false);
+                      // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyDashboardPage(title: 'Dashboard')));
                     },
                   ),
                 ],

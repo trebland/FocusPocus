@@ -1,29 +1,30 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
+import 'Routine.dart';
 import 'dashboard.dart';
+
 import 'dart:convert';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 
 
-
 class Post {
-  final String username;
+  final String token;
   final String message;
 
-  Post({this.username, this.message});
+  Post({this.token, this.message});
 
   factory Post.fromJson(Map<String, dynamic> json) {
     return Post(
-      username: json['username'],
+      token: json['token'],
       message: json['message'],
     );
   }
 }
 
-class MyRegisterAccountPage extends StatefulWidget {
-  MyRegisterAccountPage({Key key, this.title}) : super(key: key);
+class MyEditRoutinePage extends StatefulWidget {
+  MyEditRoutinePage({Key key, this.title, this.token, this.routine}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -35,20 +36,30 @@ class MyRegisterAccountPage extends StatefulWidget {
   // always marked "final".
 
   final String title;
+  final String token;
+  final Routine routine;
 
   @override
-  _MyRegisterAccountState createState() => _MyRegisterAccountState();
+  _MyEditRoutineState createState() => _MyEditRoutineState();
 }
 
-class _MyRegisterAccountState extends State<MyRegisterAccountPage> with SingleTickerProviderStateMixin {
+class _MyEditRoutineState extends State<MyEditRoutinePage> with SingleTickerProviderStateMixin {
 
-  Future<Post> fetchPost(String username, String email, String password) async {
-    var mUrl = "http://54.221.121.199/registerUser";
+  Future<Post> fetchPost(String token, String routineName, bool coffeeNap,
+      int pomTimer, int breakTimer, int pomCount, int breakCount,
+      int largeBreakCount, bool goalHit) async {
+    var mUrl = "http://54.221.121.199/editRoutine";
     // {'username': '$username', 'email': '$email', 'password': '$password'}
     var body = json.encode({
-      "username": '$username',
-      "email": '$email',
-      "password": '$password'
+      "token": '$token',
+      "routineName": '$routineName',
+      "coffeeNap": '$coffeeNap',
+      "pomTimer": '$pomTimer',
+      "breakTimer": '$breakTimer',
+      "pomCount": '$pomCount',
+      "breakCount": '$breakCount',
+      "largeBreakCount": '$largeBreakCount',
+      "goalHit": '$goalHit',
     });
 
     var response = await http.post(mUrl,
@@ -60,7 +71,7 @@ class _MyRegisterAccountState extends State<MyRegisterAccountPage> with SingleTi
       Post mPost = Post.fromJson(json.decode(response.body));
 
       Fluttertoast.showToast(
-          msg: mPost.username,
+          msg: mPost.message,
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           timeInSecForIos: 1,
@@ -69,7 +80,7 @@ class _MyRegisterAccountState extends State<MyRegisterAccountPage> with SingleTi
           fontSize: 16.0
       );
 
-      Navigator.pop(context);
+      Navigator.pop(context, MaterialPageRoute(builder: (context) => MyDashboardPage(title: 'Dashboard', token: mPost.token)));
       return mPost;
     } else {
       // If that call was not successful, throw an error.
@@ -94,10 +105,11 @@ class _MyRegisterAccountState extends State<MyRegisterAccountPage> with SingleTi
     super.initState();
   }
 
-  final _emailController = TextEditingController();
-  final _usernameController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _confirmPasswordController = TextEditingController();
+  final _nameController = TextEditingController();
+  final _focusController = TextEditingController();
+  final _shortBreakController = TextEditingController();
+  final _longBreakController = TextEditingController();
+  final _goalController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -117,10 +129,10 @@ class _MyRegisterAccountState extends State<MyRegisterAccountPage> with SingleTi
                     Text('Focus Pocus'),
                     Container(
                       child: TextField(
-                        controller: _emailController,
+                        controller: _nameController,
                         decoration: InputDecoration(
                           filled: true,
-                          labelText: 'Email',
+                          labelText: 'Routine Name',
                         ),
                       ),
                       padding: EdgeInsets.only(left: 5),
@@ -128,10 +140,14 @@ class _MyRegisterAccountState extends State<MyRegisterAccountPage> with SingleTi
                     ),
                     Container(
                       child: TextField(
-                        controller: _usernameController,
+                        controller: _focusController,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: <TextInputFormatter>[
+                          WhitelistingTextInputFormatter.digitsOnly
+                        ], // Only numbers can be entered
                         decoration: InputDecoration(
                           filled: true,
-                          labelText: 'Username',
+                          labelText: 'Focus Timer Duration',
                         ),
                       ),
                       padding: EdgeInsets.only(left: 5),
@@ -139,24 +155,45 @@ class _MyRegisterAccountState extends State<MyRegisterAccountPage> with SingleTi
                     ),
                     Container(
                       child: TextField(
-                        controller: _passwordController,
+                        controller: _shortBreakController,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: <TextInputFormatter>[
+                          WhitelistingTextInputFormatter.digitsOnly
+                        ], // Only numbers can be entered
                         decoration: InputDecoration(
                           filled: true,
-                          labelText: 'Password',
+                          labelText: 'Short Break Timer Duration',
                         ),
-                        obscureText: true,
                       ),
                       padding: EdgeInsets.only(left: 5),
                       margin: EdgeInsets.only(bottom: 20, left: 20, right: 20),
                     ),
                     Container(
                       child: TextField(
-                        controller: _confirmPasswordController,
+                        controller: _longBreakController,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: <TextInputFormatter>[
+                          WhitelistingTextInputFormatter.digitsOnly
+                        ], // Only numbers can be entered
                         decoration: InputDecoration(
                           filled: true,
-                          labelText: 'Confirm Password',
+                          labelText: 'Long Break Timer Duration',
                         ),
-                        obscureText: true,
+                      ),
+                      padding: EdgeInsets.only(left: 5),
+                      margin: EdgeInsets.only(bottom: 20, left: 20, right: 20),
+                    ),
+                    Container(
+                      child: TextField(
+                        controller: _goalController,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: <TextInputFormatter>[
+                          WhitelistingTextInputFormatter.digitsOnly
+                        ], // Only numbers can be entered
+                        decoration: InputDecoration(
+                          filled: true,
+                          labelText: 'Number of Cycles per Session',
+                        ),
                       ),
                       padding: EdgeInsets.only(left: 5),
                       margin: EdgeInsets.only(bottom: 20, left: 20, right: 20),
@@ -171,17 +208,21 @@ class _MyRegisterAccountState extends State<MyRegisterAccountPage> with SingleTi
                   FlatButton(
                     child: Text('CLEAR'),
                     onPressed: () {
-                      _emailController.clear();
-                      _usernameController.clear();
-                      _passwordController.clear();
-                      _confirmPasswordController.clear();
+                      _nameController.clear();
+                      _focusController.clear();
+                      _shortBreakController.clear();
+                      _longBreakController.clear();
+                      _goalController.clear();
                     },
                   ),
                   RaisedButton(
-                    child: Text('REGISTER'),
+                    child: Text('ADD ROUTINE'),
                     onPressed: () {
-                      fetchPost(_usernameController.text, _emailController.text, _passwordController.text);
-                      //Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyDashboardPage(title: 'Dashboard')));
+                      //String token, String routineName, bool coffeeNap,
+                      //      int pomTimer, int breakTimer, int pomCount, int breakCount,
+                      //      int largeBreakCount, bool goalHit
+                      fetchPost(widget.token, _nameController.text, false, int.parse(_focusController.text), int.parse(_shortBreakController.text), 0, 0, 0, false);
+                      // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyDashboardPage(title: 'Dashboard')));
                     },
                   ),
                 ],

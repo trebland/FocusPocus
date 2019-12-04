@@ -1,9 +1,16 @@
+import 'dart:convert';
+import 'package:focus_pocus_mobile/delete_routine.dart';
+import 'package:focus_pocus_mobile/edit_routine.dart';
+import 'package:http/http.dart' as http;
+
 import 'package:flutter/material.dart';
 import 'package:focus_pocus_mobile/add_routine.dart';
 import 'package:focus_pocus_mobile/routine_timer.dart';
 
+import 'Routine.dart';
+
 class MyDashboardPage extends StatefulWidget {
-  MyDashboardPage({Key key, this.title}) : super(key: key);
+  MyDashboardPage({Key key, this.title, this.token}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -15,16 +22,96 @@ class MyDashboardPage extends StatefulWidget {
   // always marked "final".
 
   final String title;
+  final String token;
 
   @override
   _MyDashboardState createState() => _MyDashboardState();
 }
 
+class Post {
+  final String token;
+  final List<Routine> routines;
+  final String message;
+
+  Post({this.token, this.routines, this.message});
+
+  factory Post.fromJson(Map<String, dynamic> json) {
+
+    return Post(
+      token: json['token'],
+      routines: List<Routine>.from(json['routines'].map((i) => Routine.fromJson(i))),
+      message: json['message'],
+    );
+  }
+}
+
+class Choice {
+  const Choice({this.title});
+
+  final String title;
+}
+
+const List<Choice> choices = const <Choice>[
+  const Choice(title: 'Edit Routine'),
+  const Choice(title: 'Delete Routine'),
+];
+
+
 class _MyDashboardState extends State<MyDashboardPage> with SingleTickerProviderStateMixin
 {
+  Future<Post> fetchPost(String token) async {
+    var mUrl = "http://54.221.121.199/userRoutines";
+    // {'username': '$username', 'email': '$email', 'password': '$password'}
+    var body = json.encode({
+      "token": '$token',
+    });
+
+    var response = await http.post(mUrl,
+        body: body,
+        headers: {'Content-type': 'application/json'});
+
+    if (response.statusCode == 200) {
+      // If the call to the server was successful, parse the JSON.
+      Post mPost = Post.fromJson(json.decode(response.body));
+
+      /*
+      Fluttertoast.showToast(
+          msg: mPost.message,
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIos: 1,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 16.0
+      );*/
+
+      return mPost;
+    } else {
+      // If that call was not successful, throw an error.
+      Post mPost = Post.fromJson(json.decode(response.body));
+
+      /*
+      Fluttertoast.showToast(
+          msg: mPost.message,
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIos: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0
+      );*/
+
+      throw Exception('Failed to load post');
+    }
+  }
+
+  List<Routine> routines;
+  final List<int> colorCodes = <int>[600, 500];
+
   Duration timeStandard = new Duration(minutes: 25);
   Duration timeRemaining;
 
+  Post mPost;
   String timerStartPauseText = "";
   String startTimer = "Start";
   String pauseTimer = "Pause";
@@ -40,7 +127,18 @@ class _MyDashboardState extends State<MyDashboardPage> with SingleTickerProvider
     Tab(text: 'Intake Tracker'),*/
   ];
 
+  void createSubMenu()
+  {
+
+  }
+
   TabController _tabController;
+
+  Future<Post> retrievePost ()
+  async {
+    mPost = await fetchPost(widget.token);
+    return mPost;
+  }
 
   @override
   void initState() {
@@ -57,11 +155,16 @@ class _MyDashboardState extends State<MyDashboardPage> with SingleTickerProvider
 
   void mAddRoutine()
   {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => MyAddRoutinePage(title: 'Add Routine')));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => MyAddRoutinePage(title: 'Add Routine', token: widget.token)));
   }
 
-  final List<String> routines = <String>['Study Calculus', 'Exercise', 'Play Games', 'Talk to Family', 'Check Emails', 'Remember the 80\'s'];
-  final List<int> colorCodes = <int>[600, 500];
+  void _select(Choice choice) {
+    // Causes the app to rebuild with the new _selectedChoice.
+    if (choice.title == "Edit Routine")
+      Navigator.push(context, MaterialPageRoute(builder: (context) => MyEditRoutinePage(title: 'Edit Routine', token: widget.token, routine: null)));
+    else
+      Navigator.push(context, MaterialPageRoute(builder: (context) => MyDeleteRoutinePage(title: 'Delete Routine', token: widget.token, routine: null)));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -89,12 +192,70 @@ class _MyDashboardState extends State<MyDashboardPage> with SingleTickerProvider
         children: myTabs.map((Tab tab) {
           if (tab.text == "Pomodoro Routines")
             return Center(
-              child: ListView.builder(
+              child: Container(
+                child: FutureBuilder(
+                  future: fetchPost(widget.token),
+                  builder: (BuildContext context, AsyncSnapshot<Post> snapshot) {
+                    switch (snapshot.connectionState) {
+                      case ConnectionState.none:
+                        return new Text('Issue Posting Data');
+                      case ConnectionState.waiting:
+                        return new Center(child: new CircularProgressIndicator());
+                      case ConnectionState.active:
+                        return new Text('');
+                      case ConnectionState.done:
+                        if (snapshot.hasError) {
+                          return new Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              Text(
+                                'Uh oh! No Routines Found! Start populating this list by creating a new routine with the Plus Symbol above!',
+                                style: TextStyle(color: Colors.red),
+                                textAlign: TextAlign.center,
+                              )
+                            ],
+                          );
+                        } else {
+                          routines = snapshot.data.routines;
+                          return new ListView.builder(
+                            itemCount: routines.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return Container(
+                                child: ListTile(
+                                  title: Text('${routines[index].routineName}'),
+                                  trailing: PopupMenuButton<Choice>(
+                                    onSelected: _select,
+                                    itemBuilder: (BuildContext context) {
+                                      return choices.map((Choice choice) {
+                                        return PopupMenuItem<Choice>(
+                                          value: choice,
+                                          child: Text(choice.title),
+                                        );
+                                      }).toList();
+                                    },
+                                  ),
+                                  /*,*/
+                                  onTap: () {
+                                    Navigator.push(context, MaterialPageRoute(builder: (context) => MyRoutineTimerPage(title: '${routines[index].routineName} routine', routine: routines[index])));
+                                  },
+                                  dense: false,
+                                ),
+                                color: Colors.amber[colorCodes[index%2]],
+                              );
+                            },
+                          );
+                        }
+                    }
+                  }
+                ),
+              ),
+              /*ListView.builder(
                 itemCount: routines.length,
                 itemBuilder: (BuildContext context, int index) {
                   return Container(
                     child: ListTile(
-                      title: Text('${routines[index]}'),
+                      title: Text('${routines[index].getRoutineName()}'),
                       trailing: Icon(Icons.more_vert),
                       onTap: () {
                           Navigator.push(context, MaterialPageRoute(builder: (context) => MyRoutineTimerPage(title: '${routines[index]} Timer')));
@@ -104,8 +265,9 @@ class _MyDashboardState extends State<MyDashboardPage> with SingleTickerProvider
                     color: Colors.amber[colorCodes[index%2]],
                   );
                 },
-              ),
+              ),*/
             );
+          /*
           else if(tab.text == "Power-Napper")
             return Center(
               child: Column(
@@ -277,7 +439,7 @@ class _MyDashboardState extends State<MyDashboardPage> with SingleTickerProvider
                   ),
                 ],
               )
-            );
+            );*/
           else
             return Center(
               child: ListView.separated(
