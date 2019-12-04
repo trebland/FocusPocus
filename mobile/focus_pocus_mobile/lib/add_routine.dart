@@ -120,16 +120,18 @@ class _MyAddRoutineState extends State<MyAddRoutinePage> with SingleTickerProvid
         appBar: AppBar(
           title: Text(widget.title),
         ),
-        resizeToAvoidBottomInset: false,
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Expanded(
-              child: Container(
-                child: Column(
-                  children: <Widget>[
-                    Image.asset('assets/fp_logo_small.png'),
-                    Text('Focus Pocus'),
+        body: SingleChildScrollView(
+            child: Column(
+                children: <Widget>[
+                  Container(
+                    child: Column(
+                      children: <Widget>[
+                        Image.asset('assets/fp_logo_small.png'),
+                        Text('Focus Pocus'),
+                      ],
+                    ),
+                    margin: EdgeInsets.all(10),
+                  ),
                     Container(
                       child: TextField(
                         onSubmitted: (String value) {
@@ -216,39 +218,36 @@ class _MyAddRoutineState extends State<MyAddRoutinePage> with SingleTickerProvid
                       ),
                       padding: EdgeInsets.only(left: 5),
                       margin: EdgeInsets.only(bottom: 20, left: 20, right: 20),
-                    )
-                  ],
-                ),
-              ),
-            ),
-            Container(
-              child: ButtonBar(
-                children: <Widget>[
-                  FlatButton(
-                    child: Text('CLEAR'),
-                    onPressed: () {
-                      _nameController.clear();
-                      _focusController.clear();
-                      _shortBreakController.clear();
-                      _longBreakController.clear();
-                      _goalController.clear();
-                    },
+                    ),
+                  Container(
+                    child: ButtonBar(
+                      children: <Widget>[
+                        FlatButton(
+                          child: Text('CLEAR'),
+                          onPressed: () {
+                            _nameController.clear();
+                            _focusController.clear();
+                            _shortBreakController.clear();
+                            _longBreakController.clear();
+                            _goalController.clear();
+                          },
+                        ),
+                        RaisedButton(
+                          child: Text('ADD ROUTINE'),
+                          onPressed: () {
+                            //String token, String routineName, bool coffeeNap,
+                            //      int pomTimer, int breakTimer, int pomCount, int breakCount,
+                            //      int largeBreakCount, bool goalHit
+                            fetchPost(widget.token, _nameController.text, false,
+                                int.parse(_focusController.text), int.parse(_shortBreakController.text), 0, int.parse(_longBreakController.text), int.parse(_goalController.text), false);
+                            // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyDashboardPage(title: 'Dashboard')));
+                          },
+                        ),
+                      ],
+                    ),
                   ),
-                  RaisedButton(
-                    child: Text('ADD ROUTINE'),
-                    onPressed: () {
-                      //String token, String routineName, bool coffeeNap,
-                      //      int pomTimer, int breakTimer, int pomCount, int breakCount,
-                      //      int largeBreakCount, bool goalHit
-                      fetchPost(widget.token, _nameController.text, false,
-                          int.parse(_focusController.text), int.parse(_shortBreakController.text), 0, int.parse(_longBreakController.text), int.parse(_goalController.text), false);
-                      // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyDashboardPage(title: 'Dashboard')));
-                    },
-                  ),
-                ],
-              ),
-            ),
-          ],
+                ]
+            )
         )
     );
   }

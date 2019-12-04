@@ -105,110 +105,102 @@ class _MyRegisterAccountState extends State<MyRegisterAccountPage> with SingleTi
         appBar: AppBar(
           title: Text(widget.title),
         ),
-        resizeToAvoidBottomInset: false,
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Expanded(
-              child: Container(
-                child: Column(
-                  children: <Widget>[
-                    Image.asset('assets/fp_logo_small.png'),
-                    Text('Focus Pocus'),
-                    Container(
-                      child: TextField(
-                        controller: _emailController,
-                        decoration: InputDecoration(
-                          filled: true,
-                          labelText: 'Email',
-                        ),
-                      ),
-                      padding: EdgeInsets.only(left: 5),
-                      margin: EdgeInsets.all(20),
-                    ),
-                    Container(
-                      child: TextField(
-                        controller: _usernameController,
-                        decoration: InputDecoration(
-                          filled: true,
-                          labelText: 'Username',
-                        ),
-                      ),
-                      padding: EdgeInsets.only(left: 5),
-                      margin: EdgeInsets.only(bottom: 20, left: 20, right: 20),
-                    ),
-                    Container(
-                      child: TextField(
-                        controller: _passwordController,
-                        decoration: InputDecoration(
-                          filled: true,
-                          labelText: 'Password',
-                        ),
-                        obscureText: true,
-                      ),
-                      padding: EdgeInsets.only(left: 5),
-                      margin: EdgeInsets.only(bottom: 20, left: 20, right: 20),
-                    ),
-                    Container(
-                      child: TextField(
-                        controller: _confirmPasswordController,
-                        decoration: InputDecoration(
-                          filled: true,
-                          labelText: 'Confirm Password',
-                        ),
-                        obscureText: true,
-                      ),
-                      padding: EdgeInsets.only(left: 5),
-                      margin: EdgeInsets.only(bottom: 20, left: 20, right: 20),
-                    )
-                  ],
-                ),
-              ),
-            ),
-            Container(
-              child: ButtonBar(
-                children: <Widget>[
-                  FlatButton(
-                    child: Text('CLEAR'),
-                    onPressed: () {
-                      _emailController.clear();
-                      _usernameController.clear();
-                      _passwordController.clear();
-                      _confirmPasswordController.clear();
-                    },
+        body: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+              Image.asset('assets/fp_logo_small.png'),
+              Text('Deletion Confirmation'),
+              Container(
+                child: TextField(
+                  controller: _emailController,
+                  decoration: InputDecoration(
+                    filled: true,
+                    labelText: 'Email',
                   ),
-                  RaisedButton(
-                    child: Text('REGISTER'),
-                    onPressed: () {
-                      if (!_emailController.text.contains("@") || !_emailController.text.contains(".com"))
-                        Fluttertoast.showToast(
-                            msg: "Invalid email format.",
+                ),
+                padding: EdgeInsets.only(left: 5),
+                margin: EdgeInsets.all(20),
+              ),
+              Container(
+                child: TextField(
+                  controller: _usernameController,
+                  decoration: InputDecoration(
+                    filled: true,
+                    labelText: 'Username',
+                  ),
+                ),
+                padding: EdgeInsets.only(left: 5),
+                margin: EdgeInsets.only(bottom: 20, left: 20, right: 20),
+              ),
+              Container(
+                child: TextField(
+                  controller: _passwordController,
+                  decoration: InputDecoration(
+                    filled: true,
+                    labelText: 'Password',
+                  ),
+                  obscureText: true,
+                ),
+                padding: EdgeInsets.only(left: 5),
+                margin: EdgeInsets.only(bottom: 20, left: 20, right: 20),
+              ),
+              Container(
+                child: TextField(
+                  controller: _confirmPasswordController,
+                  decoration: InputDecoration(
+                    filled: true,
+                    labelText: 'Confirm Password',
+                  ),
+                  obscureText: true,
+                ),
+                padding: EdgeInsets.only(left: 5),
+                margin: EdgeInsets.only(bottom: 20, left: 20, right: 20),
+              ),
+              Container(
+                child: ButtonBar(
+                  children: <Widget>[
+                    FlatButton(
+                      child: Text('CLEAR'),
+                      onPressed: () {
+                        _emailController.clear();
+                        _usernameController.clear();
+                        _passwordController.clear();
+                        _confirmPasswordController.clear();
+                      },
+                    ),
+                    RaisedButton(
+                      child: Text('REGISTER'),
+                      onPressed: () {
+                        if (!_emailController.text.contains("@") || !_emailController.text.contains(".com"))
+                          Fluttertoast.showToast(
+                              msg: "Invalid email format.",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.CENTER,
+                              timeInSecForIos: 1,
+                              backgroundColor: Colors.red,
+                              textColor: Colors.white,
+                              fontSize: 16.0
+                          );
+                        else if (_passwordController.text.compareTo(_confirmPasswordController.text) != 0)
+                          Fluttertoast.showToast(
+                            msg: "Passwords do not match.",
                             toastLength: Toast.LENGTH_SHORT,
                             gravity: ToastGravity.CENTER,
                             timeInSecForIos: 1,
                             backgroundColor: Colors.red,
                             textColor: Colors.white,
                             fontSize: 16.0
-                        );
-                      else if (_passwordController.text.compareTo(_confirmPasswordController.text) != 0)
-                        Fluttertoast.showToast(
-                          msg: "Passwords do not match.",
-                          toastLength: Toast.LENGTH_SHORT,
-                          gravity: ToastGravity.CENTER,
-                          timeInSecForIos: 1,
-                          backgroundColor: Colors.red,
-                          textColor: Colors.white,
-                          fontSize: 16.0
-                        );
-                      else
-                        fetchPost(_usernameController.text, _emailController.text, _passwordController.text);
-                      //Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyDashboardPage(title: 'Dashboard')));
-                    },
-                  ),
-                ],
+                          );
+                        else
+                          fetchPost(_usernameController.text, _emailController.text, _passwordController.text);
+                        //Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyDashboardPage(title: 'Dashboard')));
+                      },
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          )
         )
     );
   }

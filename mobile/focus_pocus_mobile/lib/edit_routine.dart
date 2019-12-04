@@ -122,120 +122,118 @@ class _MyEditRoutineState extends State<MyEditRoutinePage> with SingleTickerProv
         appBar: AppBar(
           title: Text(widget.title),
         ),
-        resizeToAvoidBottomInset: false,
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Expanded(
-              child: Container(
-                child: Column(
-                  children: <Widget>[
-                    Image.asset('assets/fp_logo_small.png'),
-                    Text('Focus Pocus'),
-
-                    Container(
-                      child: TextField(
-                        controller: _nameController,
-                        decoration: InputDecoration(
-                          filled: true,
-                          labelText: 'Routine Name',
-                        ),
-                      ),
-                      padding: EdgeInsets.only(left: 5),
-                      margin: EdgeInsets.all(20),
-                    ),
-                    Container(
-                      child: TextField(
-                        controller: _focusController,
-                        keyboardType: TextInputType.number,
-                        inputFormatters: <TextInputFormatter>[
-                          WhitelistingTextInputFormatter.digitsOnly
-                        ], // Only numbers can be entered
-                        decoration: InputDecoration(
-                          filled: true,
-                          labelText: 'Focus Timer Duration',
-                        ),
-                      ),
-                      padding: EdgeInsets.only(left: 5),
-                      margin: EdgeInsets.only(bottom: 20, left: 20, right: 20),
-                    ),
-                    Container(
-                      child: TextField(
-                        controller: _shortBreakController,
-                        keyboardType: TextInputType.number,
-                        inputFormatters: <TextInputFormatter>[
-                          WhitelistingTextInputFormatter.digitsOnly
-                        ], // Only numbers can be entered
-                        decoration: InputDecoration(
-                          filled: true,
-                          labelText: 'Short Break Timer Duration',
-                        ),
-                      ),
-                      padding: EdgeInsets.only(left: 5),
-                      margin: EdgeInsets.only(bottom: 20, left: 20, right: 20),
-                    ),
-                    Container(
-                      child: TextField(
-                        controller: _longBreakController,
-                        keyboardType: TextInputType.number,
-                        inputFormatters: <TextInputFormatter>[
-                          WhitelistingTextInputFormatter.digitsOnly
-                        ], // Only numbers can be entered
-                        decoration: InputDecoration(
-                          filled: true,
-                          labelText: 'Long Break Timer Duration',
-                        ),
-                      ),
-                      padding: EdgeInsets.only(left: 5),
-                      margin: EdgeInsets.only(bottom: 20, left: 20, right: 20),
-                    ),
-                    Container(
-                      child: TextField(
-                        controller: _goalController,
-                        keyboardType: TextInputType.number,
-                        inputFormatters: <TextInputFormatter>[
-                          WhitelistingTextInputFormatter.digitsOnly
-                        ], // Only numbers can be entered
-                        decoration: InputDecoration(
-                          filled: true,
-                          labelText: 'Focus Session Goal',
-                        ),
-                      ),
-                      padding: EdgeInsets.only(left: 5),
-                      margin: EdgeInsets.only(bottom: 20, left: 20, right: 20),
-                    )
-                  ],
+        body: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Container(
+                  child: Column(
+                    children: <Widget>[
+                      Image.asset('assets/fp_logo_small.png'),
+                      Text('Focus Pocus'),
+                    ],
+                  ),
+                  margin: EdgeInsets.all(10),
                 ),
-              ),
-            ),
-            Container(
-              child: ButtonBar(
-                children: <Widget>[
-                  FlatButton(
-                    child: Text('CLEAR'),
-                    onPressed: () {
-                      _nameController.clear();
-                      _focusController.clear();
-                      _shortBreakController.clear();
-                      _longBreakController.clear();
-                      _goalController.clear();
-                    },
+                Container(
+                  child: TextField(
+                    controller: _nameController,
+                    decoration: InputDecoration(
+                      filled: true,
+                      labelText: 'Routine Name',
+                    ),
                   ),
-                  RaisedButton(
-                    child: Text('EDIT ROUTINE'),
-                    onPressed: () {
-                      //String token, String routineName, bool coffeeNap,
-                      //      int pomTimer, int breakTimer, int pomCount, int breakCount,
-                      //      int largeBreakCount, bool goalHit
-                      fetchPost(widget.token, widget.routine.routineId,_nameController.text,
-                          int.parse(_focusController.text), int.parse(_shortBreakController.text), 0, int.parse(_longBreakController.text), int.parse(_goalController.text), false);
-                      // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyDashboardPage(title: 'Dashboard')));
-                    },
+                  padding: EdgeInsets.only(left: 5),
+                  margin: EdgeInsets.all(20),
+                ),
+                Container(
+                  child: TextField(
+                    controller: _focusController,
+                    keyboardType: TextInputType.number,
+                    inputFormatters: <TextInputFormatter>[
+                      WhitelistingTextInputFormatter.digitsOnly
+                    ], // Only numbers can be entered
+                    decoration: InputDecoration(
+                      filled: true,
+                      labelText: 'Focus Timer Duration',
+                    ),
                   ),
-                ],
-              ),
-            ),
-          ],
+                  padding: EdgeInsets.only(left: 5),
+                  margin: EdgeInsets.only(bottom: 20, left: 20, right: 20),
+                ),
+                Container(
+                  child: TextField(
+                    controller: _shortBreakController,
+                    keyboardType: TextInputType.number,
+                    inputFormatters: <TextInputFormatter>[
+                      WhitelistingTextInputFormatter.digitsOnly
+                    ], // Only numbers can be entered
+                    decoration: InputDecoration(
+                      filled: true,
+                      labelText: 'Short Break Timer Duration',
+                    ),
+                  ),
+                  padding: EdgeInsets.only(left: 5),
+                  margin: EdgeInsets.only(bottom: 20, left: 20, right: 20),
+                ),
+                Container(
+                  child: TextField(
+                    controller: _longBreakController,
+                    keyboardType: TextInputType.number,
+                    inputFormatters: <TextInputFormatter>[
+                      WhitelistingTextInputFormatter.digitsOnly
+                    ], // Only numbers can be entered
+                    decoration: InputDecoration(
+                      filled: true,
+                      labelText: 'Long Break Timer Duration',
+                    ),
+                  ),
+                  padding: EdgeInsets.only(left: 5),
+                  margin: EdgeInsets.only(bottom: 20, left: 20, right: 20),
+                ),
+                Container(
+                  child: TextField(
+                    controller: _goalController,
+                    keyboardType: TextInputType.number,
+                    inputFormatters: <TextInputFormatter>[
+                      WhitelistingTextInputFormatter.digitsOnly
+                    ], // Only numbers can be entered
+                    decoration: InputDecoration(
+                      filled: true,
+                      labelText: 'Focus Session Goal',
+                    ),
+                  ),
+                  padding: EdgeInsets.only(left: 5),
+                  margin: EdgeInsets.only(bottom: 20, left: 20, right: 20),
+                ),
+                Container(
+                  child: ButtonBar(
+                    children: <Widget>[
+                      FlatButton(
+                        child: Text('CLEAR'),
+                        onPressed: () {
+                          _nameController.clear();
+                          _focusController.clear();
+                          _shortBreakController.clear();
+                          _longBreakController.clear();
+                          _goalController.clear();
+                        },
+                      ),
+                      RaisedButton(
+                        child: Text('EDIT ROUTINE'),
+                        onPressed: () {
+                          //String token, String routineName, bool coffeeNap,
+                          //      int pomTimer, int breakTimer, int pomCount, int breakCount,
+                          //      int largeBreakCount, bool goalHit
+                          fetchPost(widget.token, widget.routine.routineId,_nameController.text,
+                              int.parse(_focusController.text), int.parse(_shortBreakController.text), 0, int.parse(_longBreakController.text), int.parse(_goalController.text), false);
+                          // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyDashboardPage(title: 'Dashboard')));
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+            ],
+          )
         )
     );
   }

@@ -119,8 +119,15 @@ class _MyDeleteRoutineState extends State<MyDeleteRoutinePage> with SingleTicker
               child: Container(
                 child: Column(
                   children: <Widget>[
-                    Image.asset('assets/fp_logo_small.png'),
-                    Text('Focus Pocus'),
+                    Container(
+                      child: Column(
+                        children: <Widget>[
+                          Image.asset('assets/fp_logo_small.png'),
+                          Text('Focus Pocus'),
+                        ],
+                      ),
+                      margin: EdgeInsets.all(10),
+                    ),
                     Container(
                       child: Text(
                         "Do you wish to delete this routine?",
