@@ -91,6 +91,10 @@ class _MyAddRoutineState extends State<MyAddRoutinePage> with SingleTickerProvid
   @override
   void initState() {
     super.initState();
+    _focusController.text = "25";
+    _shortBreakController.text = "5";
+    _longBreakController.text = "10";
+    _goalController.text = "3";
   }
 
   final _nameController = TextEditingController();
