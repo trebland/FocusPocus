@@ -59,16 +59,6 @@ class _MyRegisterAccountState extends State<MyRegisterAccountPage> with SingleTi
       // If the call to the server was successful, parse the JSON.
       Post mPost = Post.fromJson(json.decode(response.body));
 
-      Fluttertoast.showToast(
-          msg: mPost.username,
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIos: 1,
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-          fontSize: 16.0
-      );
-
       Navigator.pop(context);
       return mPost;
     } else {
@@ -109,7 +99,7 @@ class _MyRegisterAccountState extends State<MyRegisterAccountPage> with SingleTi
             child: Column(
               children: <Widget>[
               Image.asset('assets/fp_logo_small.png'),
-              Text('Deletion Confirmation'),
+              Text('Focus Pocus'),
               Container(
                 child: TextField(
                   controller: _emailController,

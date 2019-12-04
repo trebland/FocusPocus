@@ -68,16 +68,6 @@ class _MyAddRoutineState extends State<MyAddRoutinePage> with SingleTickerProvid
       // If the call to the server was successful, parse the JSON.
       Post mPost = Post.fromJson(json.decode(response.body));
 
-      Fluttertoast.showToast(
-          msg: mPost.message,
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIos: 1,
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-          fontSize: 16.0
-      );
-
       Navigator.pop(context, MaterialPageRoute(builder: (context) => MyDashboardPage(title: 'Dashboard', token: mPost.token)));
       return mPost;
     } else {
