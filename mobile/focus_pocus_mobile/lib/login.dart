@@ -164,23 +164,6 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                         Builder(
                             builder: (context) => Center(
                                 child: FlatButton(
-                                  child: const Text('Forgot Password?'),
-                                  onPressed: ()
-                                  {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(builder: (context) => MyForgotPasswordPage(title: "Reset Password",)),
-                                    );
-                                  },
-                                )
-                            )
-                        ),
-                        Text(
-                            "OR"
-                        ),
-                        Builder(
-                            builder: (context) => Center(
-                                child: FlatButton(
                                   child: const Text('Register Account'),
                                   onPressed: ()
                                   {
