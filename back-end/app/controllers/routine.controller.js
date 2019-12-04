@@ -156,7 +156,7 @@ exports.userRoutines = (req, res) => {
 // JSON inputs required: token and _id
 // outputs JSON: token, updated routine with all
 // fields except userId, and message
-// don't need to check coffeeNap b/c no need to edit coffee naps
+// Note: Only for routines (use editNap to edit coffee naps)
 exports.edit = (req, res) => {
   // Check required fields
   if (!req.body.token) {
@@ -273,6 +273,103 @@ exports.edit = (req, res) => {
       });
     });
 }; // end edit
+
+// Edit coffee nap
+// JSON inputs required: token and _id
+// outputs JSON: token, updated coffee nap
+// Note: Only for coffee naps
+exports.editNap = (req, res) => {
+  // Check required fields
+  if (!req.body.token) {
+    return res.status(400).json({
+      message: "Token can not be empty."
+    });
+  }
+  if (!req.body._id) {
+    return res.status(400).json({
+      message: "_id can not be empty."
+    });
+  }
+
+  let token, userId;
+  if ( jwt.verify(req.body.token) ) {
+    // decode jwt, then decrypt user ID
+    token = jwt.decode(req.body.token);
+    userId = crypto.decrypt(token.payload.userId);
+    if (userId.length == 26) {
+      userId = userId.substr(1, userId.length - 2);
+    }
+  }
+  else {
+    return res.status(401).json({
+      message: "Token could not be verified."
+    });
+  }
+
+  // find coffee nap by id and replace empty variables
+  Routine.findById(req.body._id)
+    .then(routine => {
+      if (!routine) {
+        return res.status(404).json({
+          message: "Coffee nap not found with id " + req.body._id
+        });
+      }
+      if (!req.body.napTimer) {
+        req.body.napTimer = routine.napTimer;
+      }
+
+      // Find user by _id and update it
+      Routine.findByIdAndUpdate(
+        req.body._id,
+        {
+          napTimer: req.body.napTimer
+        },
+        { new: true }
+      )
+        .then(routine => {
+          if (!routine) {
+            return res.status(404).json({
+              message: "Coffee nap not found with id " + req.body._id
+            });
+          }
+
+          // encrypt user ID before putting into payload
+          let cipher = crypto.encrypt(userId);
+          let payload = {
+            userId: cipher,
+          };
+          let token = jwt.sign(payload);
+
+          routine.userId = undefined;
+
+          res.json({
+            token: token,
+            routine,
+            message: "Coffee nap successfully updated!"
+          });
+        })
+        .catch(err => {
+          if (err.kind === "ObjectId") {
+            return res.status(404).json({
+              message: "Coffee nap not found with id " + req.body._id
+            });
+          }
+          return res.status(500).json({
+            message: "Error updating coffee nap with id " + req.body._id
+          });
+        });
+    })
+    .catch(err => {
+      if (err.kind === "ObjectId") {
+        return res.status(404).json({
+          message: "Coffee nap not found with id " + req.body._id
+        });
+      }
+      return res.status(500).json({
+        message: "Error updating coffee nap with id " + req.body._id
+      });
+    });
+}; // end editNap
 
 // Delete a routine
 // JSON inputs required: token and _id
