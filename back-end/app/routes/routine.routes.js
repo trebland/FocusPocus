@@ -14,6 +14,9 @@ module.exports = app => {
   // Edit a routine
   app.put("/editRoutine", routines.edit);
 
+  // Edit coffee nap
+  app.put("/editNap", routines.editNap);
+
   // Delete a routine
   app.delete("/deleteRoutine", routines.delete);
 
