@@ -100,6 +100,7 @@ class _MyRoutineTimerState extends State<MyRoutineTimerPage> with SingleTickerPr
               if (widget.routine.pomCount % 2 == 0)
               {
                 timerType = longBreakTimer;
+                timeRemaining = new Duration(minutes: (widget.routine.breakCount));
               }
               else
               {
@@ -334,7 +335,7 @@ class _MyRoutineTimerState extends State<MyRoutineTimerPage> with SingleTickerPr
                                                     textAlign: TextAlign.left,
                                                     enabled: false,
                                                     decoration: new InputDecoration(
-                                                      hintText: "Long Break Timer: " + (widget.routine.breakTimer*2).toString(),
+                                                      hintText: "Long Break Timer: " + (widget.routine.breakCount).toString(),
                                                       border: new OutlineInputBorder(
                                                         borderRadius: BorderRadius.only(
                                                           topRight: Radius.circular(20),
@@ -380,7 +381,8 @@ class _MyRoutineTimerState extends State<MyRoutineTimerPage> with SingleTickerPr
                                                     textAlign: TextAlign.left,
                                                     enabled: false,
                                                     decoration: new InputDecoration(
-                                                      hintText: "Goal Hit: " + widget.routine.goalHit.toString(),
+                                                      hintText:
+                                                      (widget.routine.largeBreakCount - widget.routine.pomCount) > 0 ? "Focus Timers Remaining: " + (widget.routine.largeBreakCount - widget.routine.pomCount).toString() : "Session Goal Met!",
                                                       border: new OutlineInputBorder(
                                                         borderRadius: BorderRadius.only(
                                                           topRight: Radius.circular(20),
@@ -432,7 +434,7 @@ class _MyRoutineTimerState extends State<MyRoutineTimerPage> with SingleTickerPr
                             ),
                             Container(
                               child: RaisedButton(
-                                child: Text('Reset Timer'),
+                                child: Text('Reset Session'),
                                 onPressed: () {
                                   mResetTimer();
                                 },

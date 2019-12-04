@@ -132,7 +132,7 @@ class _MyEditRoutineState extends State<MyEditRoutinePage> with SingleTickerProv
                         controller: _nameController,
                         decoration: InputDecoration(
                           filled: true,
-                          labelText: 'Routine Name',
+                          labelText: widget.routine.routineName,
                         ),
                       ),
                       padding: EdgeInsets.only(left: 5),
@@ -147,7 +147,7 @@ class _MyEditRoutineState extends State<MyEditRoutinePage> with SingleTickerProv
                         ], // Only numbers can be entered
                         decoration: InputDecoration(
                           filled: true,
-                          labelText: 'Focus Timer Duration',
+                          labelText: widget.routine.pomTimer.toString(),
                         ),
                       ),
                       padding: EdgeInsets.only(left: 5),
@@ -162,7 +162,7 @@ class _MyEditRoutineState extends State<MyEditRoutinePage> with SingleTickerProv
                         ], // Only numbers can be entered
                         decoration: InputDecoration(
                           filled: true,
-                          labelText: 'Short Break Timer Duration',
+                          labelText: widget.routine.breakTimer.toString(),
                         ),
                       ),
                       padding: EdgeInsets.only(left: 5),
@@ -177,7 +177,7 @@ class _MyEditRoutineState extends State<MyEditRoutinePage> with SingleTickerProv
                         ], // Only numbers can be entered
                         decoration: InputDecoration(
                           filled: true,
-                          labelText: 'Long Break Timer Duration',
+                          labelText: widget.routine.breakCount.toString(),
                         ),
                       ),
                       padding: EdgeInsets.only(left: 5),
@@ -192,7 +192,7 @@ class _MyEditRoutineState extends State<MyEditRoutinePage> with SingleTickerProv
                         ], // Only numbers can be entered
                         decoration: InputDecoration(
                           filled: true,
-                          labelText: 'Number of Cycles per Session',
+                          labelText: widget.routine.largeBreakCount.toString(),
                         ),
                       ),
                       padding: EdgeInsets.only(left: 5),
@@ -216,7 +216,7 @@ class _MyEditRoutineState extends State<MyEditRoutinePage> with SingleTickerProv
                     },
                   ),
                   RaisedButton(
-                    child: Text('ADD ROUTINE'),
+                    child: Text('EDIT ROUTINE'),
                     onPressed: () {
                       //String token, String routineName, bool coffeeNap,
                       //      int pomTimer, int breakTimer, int pomCount, int breakCount,

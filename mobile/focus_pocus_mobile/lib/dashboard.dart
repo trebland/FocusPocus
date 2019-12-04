@@ -45,18 +45,6 @@ class Post {
   }
 }
 
-class Choice {
-  const Choice({this.title});
-
-  final String title;
-}
-
-const List<Choice> choices = const <Choice>[
-  const Choice(title: 'Edit Routine'),
-  const Choice(title: 'Delete Routine'),
-];
-
-
 class _MyDashboardState extends State<MyDashboardPage> with SingleTickerProviderStateMixin
 {
   Future<Post> fetchPost(String token) async {
@@ -161,9 +149,9 @@ class _MyDashboardState extends State<MyDashboardPage> with SingleTickerProvider
   void _select(Choice choice) {
     // Causes the app to rebuild with the new _selectedChoice.
     if (choice.title == "Edit Routine")
-      Navigator.push(context, MaterialPageRoute(builder: (context) => MyEditRoutinePage(title: 'Edit Routine', token: widget.token, routine: null)));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => MyEditRoutinePage(title: 'Edit Routine', token: widget.token, routine: choice.routine)));
     else
-      Navigator.push(context, MaterialPageRoute(builder: (context) => MyDeleteRoutinePage(title: 'Delete Routine', token: widget.token, routine: null)));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => MyDeleteRoutinePage(title: 'Delete Routine', token: widget.token, routine: choice.routine)));
   }
 
   @override
@@ -227,7 +215,7 @@ class _MyDashboardState extends State<MyDashboardPage> with SingleTickerProvider
                                   trailing: PopupMenuButton<Choice>(
                                     onSelected: _select,
                                     itemBuilder: (BuildContext context) {
-                                      return choices.map((Choice choice) {
+                                      return routines[index].choices.map((Choice choice) {
                                         return PopupMenuItem<Choice>(
                                           value: choice,
                                           child: Text(choice.title),

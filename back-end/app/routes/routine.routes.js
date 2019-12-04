@@ -18,11 +18,11 @@ module.exports = app => {
   app.put("/editNap", routines.editNap);
 
   // Delete a routine
-  app.delete("/deleteRoutine", routines.delete);
+  app.post("/deleteRoutine", routines.delete);
 
   // Delete all routines for a specific user
-  app.delete("/deleteAllUserRoutines", routines.deleteAll);
+  app.post("/deleteAllUserRoutines", routines.deleteAll);
 
   // Retrieve all routines: ADMIN USE ONLY
-  app.get("/getAllRoutines", routines.getAll);
+  app.post("/getAllRoutines", routines.getAll);
 };

@@ -190,7 +190,7 @@ class _MyAddRoutineState extends State<MyAddRoutinePage> with SingleTickerProvid
                         ], // Only numbers can be entered
                         decoration: InputDecoration(
                           filled: true,
-                          labelText: 'Number of Cycles per Session',
+                          labelText: 'Focus Session Goal',
                         ),
                       ),
                       padding: EdgeInsets.only(left: 5),
@@ -219,7 +219,8 @@ class _MyAddRoutineState extends State<MyAddRoutinePage> with SingleTickerProvid
                       //String token, String routineName, bool coffeeNap,
                       //      int pomTimer, int breakTimer, int pomCount, int breakCount,
                       //      int largeBreakCount, bool goalHit
-                      fetchPost(widget.token, _nameController.text, false, int.parse(_focusController.text), int.parse(_shortBreakController.text), 0, 0, 0, false);
+                      fetchPost(widget.token, _nameController.text, false,
+                          int.parse(_focusController.text), int.parse(_shortBreakController.text), 0, int.parse(_longBreakController.text), int.parse(_goalController.text), false);
                       // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyDashboardPage(title: 'Dashboard')));
                     },
                   ),

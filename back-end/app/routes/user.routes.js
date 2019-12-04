@@ -15,8 +15,8 @@ module.exports = app => {
   app.put("/editUser", users.edit);
 
   // Delete user account
-  app.delete("/deleteUser", users.delete);
+  app.post("/deleteUser", users.delete);
 
   // Retrieve all users: ADMIN USE ONLY
-  app.get("/getAllUsers", users.getAll);
+  app.post("/getAllUsers", users.getAll);
 };

@@ -45,21 +45,13 @@ class MyDeleteRoutinePage extends StatefulWidget {
 
 class _MyDeleteRoutineState extends State<MyDeleteRoutinePage> with SingleTickerProviderStateMixin {
 
-  Future<Post> fetchPost(String token, String routineName, bool coffeeNap,
-      int pomTimer, int breakTimer, int pomCount, int breakCount,
-      int largeBreakCount, bool goalHit) async {
-    var mUrl = "http://54.221.121.199/editRoutine";
-    // {'username': '$username', 'email': '$email', 'password': '$password'}
+  Future<Post> fetchPost(String token, String routineId) async {
+
+    var mUrl = "http://54.221.121.199/deleteRoutine";
+
     var body = json.encode({
       "token": '$token',
-      "routineName": '$routineName',
-      "coffeeNap": '$coffeeNap',
-      "pomTimer": '$pomTimer',
-      "breakTimer": '$breakTimer',
-      "pomCount": '$pomCount',
-      "breakCount": '$breakCount',
-      "largeBreakCount": '$largeBreakCount',
-      "goalHit": '$goalHit',
+      "routineId": '$routineId',
     });
 
     var response = await http.post(mUrl,
