@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Login',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: LoginPage(title: 'Focus Pocus -- Login'),
+      home: LoginPage(title: 'Login'),
     );
   }
 }
@@ -85,16 +85,6 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
       // If the call to the server was successful, parse the JSON.
       Post mPost = Post.fromJson(json.decode(response.body));
 
-      Fluttertoast.showToast(
-          msg: mPost.message,
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIos: 1,
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-          fontSize: 16.0
-      );
-
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyDashboardPage(title: 'Dashboard', token: mPost.token)));
       return mPost;
     } else {
@@ -102,7 +92,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
       Post mPost = Post.fromJson(json.decode(response.body));
 
       Fluttertoast.showToast(
-          msg: mPost.message,
+          msg: mPost.message.compareTo("Incorect password.") == 0 ? "Username or Password is incorrect." : mPost.message,
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           timeInSecForIos: 1,
@@ -123,6 +113,8 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
 
+  FocusNode passNode = new FocusNode();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -141,6 +133,9 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                   Text('Focus Pocus'),
                   Container(
                     child: TextField(
+                      onSubmitted: (String value) {
+                        FocusScope.of(context).requestFocus(passNode);
+                      },
                       controller: _usernameController,
                       decoration: InputDecoration(
                         filled: true,
@@ -152,6 +147,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                   ),
                   Container(
                     child: TextField(
+                      focusNode: passNode,
                       controller: _passwordController,
                       decoration: InputDecoration(
                         filled: true,

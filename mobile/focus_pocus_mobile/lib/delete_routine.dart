@@ -11,13 +11,15 @@ import 'package:http/http.dart' as http;
 
 class Post {
   final String token;
+  final String routineName;
   final String message;
 
-  Post({this.token, this.message});
+  Post({this.token, this.routineName, this.message});
 
   factory Post.fromJson(Map<String, dynamic> json) {
     return Post(
       token: json['token'],
+      routineName: json['routineName'],
       message: json['message'],
     );
   }
@@ -51,7 +53,7 @@ class _MyDeleteRoutineState extends State<MyDeleteRoutinePage> with SingleTicker
 
     var body = json.encode({
       "token": '$token',
-      "routineId": '$routineId',
+      "_id": '$routineId',
     });
 
     var response = await http.post(mUrl,
@@ -63,7 +65,7 @@ class _MyDeleteRoutineState extends State<MyDeleteRoutinePage> with SingleTicker
       Post mPost = Post.fromJson(json.decode(response.body));
 
       Fluttertoast.showToast(
-          msg: mPost.message,
+          msg: "Successfully deleted " + mPost.routineName,
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           timeInSecForIos: 1,
@@ -72,7 +74,7 @@ class _MyDeleteRoutineState extends State<MyDeleteRoutinePage> with SingleTicker
           fontSize: 16.0
       );
 
-      Navigator.pop(context, MaterialPageRoute(builder: (context) => MyDashboardPage(title: 'Dashboard', token: mPost.token)));
+      Navigator.pop(context);
       return mPost;
     } else {
       // If that call was not successful, throw an error.
@@ -135,8 +137,7 @@ class _MyDeleteRoutineState extends State<MyDeleteRoutinePage> with SingleTicker
                           //String token, String routineName, bool coffeeNap,
                           //      int pomTimer, int breakTimer, int pomCount, int breakCount,
                           //      int largeBreakCount, bool goalHit
-                          // fetchPost(widget.token, _nameController.text, false, int.parse(_focusController.text), int.parse(_shortBreakController.text), 0, 0, 0, false);
-                          Navigator.pop(context);
+                          fetchPost(widget.token, widget.routine.routineId);
                         },
                       ),
                     ),

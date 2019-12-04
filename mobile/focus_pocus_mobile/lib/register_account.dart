@@ -76,7 +76,7 @@ class _MyRegisterAccountState extends State<MyRegisterAccountPage> with SingleTi
       Post mPost = Post.fromJson(json.decode(response.body));
 
       Fluttertoast.showToast(
-          msg: mPost.message,
+          msg: mPost.message.contains("User validation failed: ") ? "Email or Username is already in use." : mPost.message,
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           timeInSecForIos: 1,
@@ -180,7 +180,28 @@ class _MyRegisterAccountState extends State<MyRegisterAccountPage> with SingleTi
                   RaisedButton(
                     child: Text('REGISTER'),
                     onPressed: () {
-                      fetchPost(_usernameController.text, _emailController.text, _passwordController.text);
+                      if (!_emailController.text.contains("@") || !_emailController.text.contains(".com"))
+                        Fluttertoast.showToast(
+                            msg: "Invalid email format.",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.CENTER,
+                            timeInSecForIos: 1,
+                            backgroundColor: Colors.red,
+                            textColor: Colors.white,
+                            fontSize: 16.0
+                        );
+                      else if (_passwordController.text.compareTo(_confirmPasswordController.text) != 0)
+                        Fluttertoast.showToast(
+                          msg: "Passwords do not match.",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.CENTER,
+                          timeInSecForIos: 1,
+                          backgroundColor: Colors.red,
+                          textColor: Colors.white,
+                          fontSize: 16.0
+                        );
+                      else
+                        fetchPost(_usernameController.text, _emailController.text, _passwordController.text);
                       //Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyDashboardPage(title: 'Dashboard')));
                     },
                   ),

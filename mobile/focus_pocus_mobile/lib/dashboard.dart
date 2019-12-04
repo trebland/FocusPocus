@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:focus_pocus_mobile/delete_routine.dart';
 import 'package:focus_pocus_mobile/edit_routine.dart';
+import 'package:focus_pocus_mobile/login.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
@@ -167,6 +168,15 @@ class _MyDashboardState extends State<MyDashboardPage> with SingleTickerProvider
             ),
             onPressed: () {
               mAddRoutine();
+            },
+          ),
+          IconButton(
+            icon: Icon(
+              Icons.exit_to_app,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage(title: 'Login')));
             },
           )
         ],

@@ -109,6 +109,11 @@ class _MyAddRoutineState extends State<MyAddRoutinePage> with SingleTickerProvid
   final _longBreakController = TextEditingController();
   final _goalController = TextEditingController();
 
+  FocusNode pomNode = new FocusNode();
+  FocusNode breakNode = new FocusNode();
+  FocusNode largeBreakNode = new FocusNode();
+  FocusNode goalNode = new FocusNode();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -127,6 +132,9 @@ class _MyAddRoutineState extends State<MyAddRoutinePage> with SingleTickerProvid
                     Text('Focus Pocus'),
                     Container(
                       child: TextField(
+                        onSubmitted: (String value) {
+                          FocusScope.of(context).requestFocus(pomNode);
+                        },
                         controller: _nameController,
                         decoration: InputDecoration(
                           filled: true,
@@ -138,6 +146,10 @@ class _MyAddRoutineState extends State<MyAddRoutinePage> with SingleTickerProvid
                     ),
                     Container(
                       child: TextField(
+                        onSubmitted: (String value) {
+                          FocusScope.of(context).requestFocus(breakNode);
+                        },
+                        focusNode: pomNode,
                         controller: _focusController,
                         keyboardType: TextInputType.number,
                         inputFormatters: <TextInputFormatter>[
@@ -153,6 +165,10 @@ class _MyAddRoutineState extends State<MyAddRoutinePage> with SingleTickerProvid
                     ),
                     Container(
                       child: TextField(
+                        onSubmitted: (String value) {
+                          FocusScope.of(context).requestFocus(largeBreakNode);
+                        },
+                        focusNode: breakNode,
                         controller: _shortBreakController,
                         keyboardType: TextInputType.number,
                         inputFormatters: <TextInputFormatter>[
@@ -168,6 +184,10 @@ class _MyAddRoutineState extends State<MyAddRoutinePage> with SingleTickerProvid
                     ),
                     Container(
                       child: TextField(
+                        onSubmitted: (String value) {
+                          FocusScope.of(context).requestFocus(goalNode);
+                        },
+                        focusNode: largeBreakNode,
                         controller: _longBreakController,
                         keyboardType: TextInputType.number,
                         inputFormatters: <TextInputFormatter>[
@@ -183,6 +203,7 @@ class _MyAddRoutineState extends State<MyAddRoutinePage> with SingleTickerProvid
                     ),
                     Container(
                       child: TextField(
+                        focusNode: goalNode,
                         controller: _goalController,
                         keyboardType: TextInputType.number,
                         inputFormatters: <TextInputFormatter>[

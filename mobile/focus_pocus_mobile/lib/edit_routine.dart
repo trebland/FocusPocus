@@ -45,15 +45,15 @@ class MyEditRoutinePage extends StatefulWidget {
 
 class _MyEditRoutineState extends State<MyEditRoutinePage> with SingleTickerProviderStateMixin {
 
-  Future<Post> fetchPost(String token, String routineName, bool coffeeNap,
+  Future<Post> fetchPost(String token, String routineId, String routineName,
       int pomTimer, int breakTimer, int pomCount, int breakCount,
       int largeBreakCount, bool goalHit) async {
     var mUrl = "http://54.221.121.199/editRoutine";
     // {'username': '$username', 'email': '$email', 'password': '$password'}
     var body = json.encode({
       "token": '$token',
+      "_id": '$routineId',
       "routineName": '$routineName',
-      "coffeeNap": '$coffeeNap',
       "pomTimer": '$pomTimer',
       "breakTimer": '$breakTimer',
       "pomCount": '$pomCount',
@@ -62,7 +62,7 @@ class _MyEditRoutineState extends State<MyEditRoutinePage> with SingleTickerProv
       "goalHit": '$goalHit',
     });
 
-    var response = await http.post(mUrl,
+    var response = await http.put(mUrl,
         body: body,
         headers: {'Content-type': 'application/json'});
 
@@ -100,16 +100,21 @@ class _MyEditRoutineState extends State<MyEditRoutinePage> with SingleTickerProv
     }
   }
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
   final _nameController = TextEditingController();
   final _focusController = TextEditingController();
   final _shortBreakController = TextEditingController();
   final _longBreakController = TextEditingController();
   final _goalController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _nameController.text = widget.routine.routineName;
+    _focusController.text = widget.routine.pomTimer.toString();
+    _shortBreakController.text = widget.routine.breakTimer.toString();
+    _longBreakController.text = widget.routine.breakCount.toString();
+    _goalController.text = widget.routine.largeBreakCount.toString();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -127,12 +132,13 @@ class _MyEditRoutineState extends State<MyEditRoutinePage> with SingleTickerProv
                   children: <Widget>[
                     Image.asset('assets/fp_logo_small.png'),
                     Text('Focus Pocus'),
+
                     Container(
                       child: TextField(
                         controller: _nameController,
                         decoration: InputDecoration(
                           filled: true,
-                          labelText: widget.routine.routineName,
+                          labelText: 'Routine Name',
                         ),
                       ),
                       padding: EdgeInsets.only(left: 5),
@@ -147,7 +153,7 @@ class _MyEditRoutineState extends State<MyEditRoutinePage> with SingleTickerProv
                         ], // Only numbers can be entered
                         decoration: InputDecoration(
                           filled: true,
-                          labelText: widget.routine.pomTimer.toString(),
+                          labelText: 'Focus Timer Duration',
                         ),
                       ),
                       padding: EdgeInsets.only(left: 5),
@@ -162,7 +168,7 @@ class _MyEditRoutineState extends State<MyEditRoutinePage> with SingleTickerProv
                         ], // Only numbers can be entered
                         decoration: InputDecoration(
                           filled: true,
-                          labelText: widget.routine.breakTimer.toString(),
+                          labelText: 'Short Break Timer Duration',
                         ),
                       ),
                       padding: EdgeInsets.only(left: 5),
@@ -177,7 +183,7 @@ class _MyEditRoutineState extends State<MyEditRoutinePage> with SingleTickerProv
                         ], // Only numbers can be entered
                         decoration: InputDecoration(
                           filled: true,
-                          labelText: widget.routine.breakCount.toString(),
+                          labelText: 'Long Break Timer Duration',
                         ),
                       ),
                       padding: EdgeInsets.only(left: 5),
@@ -192,7 +198,7 @@ class _MyEditRoutineState extends State<MyEditRoutinePage> with SingleTickerProv
                         ], // Only numbers can be entered
                         decoration: InputDecoration(
                           filled: true,
-                          labelText: widget.routine.largeBreakCount.toString(),
+                          labelText: 'Focus Session Goal',
                         ),
                       ),
                       padding: EdgeInsets.only(left: 5),
@@ -221,7 +227,8 @@ class _MyEditRoutineState extends State<MyEditRoutinePage> with SingleTickerProv
                       //String token, String routineName, bool coffeeNap,
                       //      int pomTimer, int breakTimer, int pomCount, int breakCount,
                       //      int largeBreakCount, bool goalHit
-                      fetchPost(widget.token, _nameController.text, false, int.parse(_focusController.text), int.parse(_shortBreakController.text), 0, 0, 0, false);
+                      fetchPost(widget.token, widget.routine.routineId,_nameController.text,
+                          int.parse(_focusController.text), int.parse(_shortBreakController.text), 0, int.parse(_longBreakController.text), int.parse(_goalController.text), false);
                       // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyDashboardPage(title: 'Dashboard')));
                     },
                   ),
