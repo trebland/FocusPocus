@@ -29,9 +29,11 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-      this.setState({
-        isLoading: false,
-      });
+    
+
+    this.setState({
+      isLoading: false,
+    });
   }
 
   handleChange = event => {
@@ -49,11 +51,10 @@ class App extends React.Component {
       .then(token => this.setState({token}));
 
     if (!(username==="user" && password==="123")){
-      alert("fail");
+      
       return;
     }
 
-    alert("you're logged in");
     this.props.history.push("Welcome");
   }
 
@@ -91,11 +92,8 @@ class App extends React.Component {
         <form onSubmit={this.Login}>
         	<h1>Sign In</h1>
           <br/>
-          
-          <div>Username: {this.state.username}</div>
-          <div>Password: {this.state.password}</div>
-
           <div>
+          
             <input
               type="username"
               value={this.state.username}

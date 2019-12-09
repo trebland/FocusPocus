@@ -8,7 +8,7 @@ import { Route, Link, BrowserRouter as Router } from 'react-router-dom'
 class AllUsers extends Component {
   state = {
       isLoading: true,
-      token: 0,
+      token: '',
       username: '',
       message: '',
       users: []
@@ -18,37 +18,36 @@ class AllUsers extends Component {
 
     this.state = {
       isLoading: true,
-      token: 0,
+      token: '',
       username: '',
       message: '',
       users: [],
-    };
-
-    
+    };   
   }
+
 
   componentDidMount() {
 
-    fetch('http://54.221.121.199/getAllUsers')
-      .then(response => response.json())
-      .then(users => this.setState({users}));
-
-    this.setState({users: [{username: "Yeet", email: "a@a.com", fullName: "a a"},
-                           {username: "lol", email: "b@b.com", fullName: "b b"},
-                           {username: "omg", email: "c@c.com", fullName: "c c"}]
+    /*
+    fetch('http://54.221.121.199/loginUser/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username: 'Admin', password: '3p4SS100'}),
+    }).then(response => response.json())
+      .then(data => this.setState({
+        token: data,
+    })
+    )
+    */
+    this.setState({users: [{username: "jeff", email: "jello@hy.com", fullName: ""},
+                           {username: "Bill", email: "Bill@email.com", fullName: "Bill Boy"},
+                           {username: "slothboy", email: "slothboy@email.com", fullName: "True Sloth Boy"}]
                   })
-
+    
     this.setState({
       isLoading: false,
     });
   }
-  
-  row(user, i){
-    return (
-      <div>{i} - {user}</div>
-    )
-  }
-
 
   render() {
     const {
@@ -67,12 +66,11 @@ class AllUsers extends Component {
       return (
         <div>
         	<h1>Load All Users</h1>
-          All Users: 
-
-          {this.state.users.map(user => (<p>username - {user.username}
-          Full Name - {user.fullName}
-          Email - {user.email}</p>))}
           
+          <div class="container">
+            <div>Username:</div><div>Full Name:</div><div>Email:</div>
+            {this.state.users.map(user => (<><div>{user.username}</div><div>{user.fullName}</div><div>{user.email}</div></>))}
+          </div>
         </div>
       );
     }

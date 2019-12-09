@@ -10,6 +10,7 @@ import {
 } from "react-router-dom";
 
 import AllUsers from "./AllUsers";
+import AllRoutines from "./AllRoutines";
 import Notfound from "./notfound";
 import Summary from "./Summary";
 import LogoPage from "./LogoPage";
@@ -24,6 +25,7 @@ class Welcome extends React.Component {
       message: ''
     }; 
 
+
   constructor(props) {
     super(props);
 
@@ -36,9 +38,6 @@ class Welcome extends React.Component {
   }
 
   componentDidMount() {
-
-
-
     this.setState({
       isLoading: false,
     });
@@ -70,14 +69,16 @@ class Welcome extends React.Component {
               </Link>
               <Link to="/Summary"><button class="hotbarButton">Summary</button></Link>
               <Link to="/AllUsers"><button class="hotbarButton">Load All Users</button></Link>
+              <Link to="/AllRoutines"><button class="hotbarButton">Load All Routines</button></Link>
         </div>
           </ul>
           <Switch>
-            <Route exact path="/Summary" component={Summary} />
+            <Route exact path="/LogoPage" component={LogoPage} />
+            <Route path="/Summary" component={Summary} />
             <Route path="/allUsers" component={AllUsers} />
-            <Route path="/LogoPage" component={LogoPage} />
+            <Route path="/allRoutines" component={AllRoutines} />
 
-            <Route component={Notfound} />
+            <Route component={LogoPage} />
           </Switch>
         </div>
       </Router>
