@@ -4,7 +4,6 @@ import './index.css';
 import App from './App';
 import Welcome from './Welcome';
 import { Route, Link, BrowserRouter as Router, withRouter} from 'react-router-dom';
-import createBrowserHistory from 'history/createBrowserHistory';
 
 
 const Index = () => (
